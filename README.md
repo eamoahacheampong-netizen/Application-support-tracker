@@ -29,7 +29,7 @@ As an SRE, the primary focus of this build was **reliability, portability, and e
 
 ## Local Deployment Instructions
 
-To spin up this environment locally, ensure Docker Desktop is running, then execute the following commands in the project root:
+To start up this environment locally, ensure Docker Desktop is running, then execute the following commands in the project root:
 
 1. **Start the containerized environment:**
    ```bash
