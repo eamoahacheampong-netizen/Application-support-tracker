@@ -9,15 +9,24 @@ class CommentController extends Controller
 {
     public function store(Request $request, Activity $activity)
     {
-        // 1. Security validation: Ensure they actually typed something
+        // 1. Validate the incoming data (ensure the file is safe)
         $request->validate([
-            'body' => 'required|string|max:1000',
+            'body' => 'required|string',
+            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120', // Max 5MB
         ]);
 
-        // 2. Save the comment and link it to the current engineer and the specific ticket
+        // 2. Handle the file upload if one exists
+        $filePath = null;
+        if ($request->hasFile('attachment')) {
+            // This saves the file to storage/app/public/attachments
+            $filePath = $request->file('attachment')->store('attachments', 'public');
+        }
+
+        // 3. Create the comment and save the file path to the database
         $activity->comments()->create([
+            'body' => $request->body,
             'user_id' => auth()->id(),
-            'body' => $request->body
+            'file_path' => $filePath,
         ]);
 
         return back();

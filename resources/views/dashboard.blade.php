@@ -78,19 +78,39 @@
                                         <h4 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">Activity Log</h4>
                                         
                                         @foreach($activity->comments as $comment)
-                                            <div class="text-sm text-gray-800 mb-2 border-l-2 border-indigo-400 pl-2">
-                                                <span class="font-bold">{{ $comment->user->name }}:</span> {{ $comment->body }}
-                                                <span class="text-xs text-gray-500 ml-1">({{ $comment->created_at->diffForHumans() }})</span>
+                                            <div class="text-sm text-gray-800 mb-4 border-l-2 border-indigo-400 pl-2">
+                                                <div>
+                                                    <span class="font-bold">{{ $comment->user->name }}:</span> {{ $comment->body }}
+                                                    <span class="text-xs text-gray-500 ml-1">({{ $comment->created_at->diffForHumans() }})</span>
+                                                </div>
+                                                
+                                                <!-- NEW: Display the image if it exists -->
+                                                @if($comment->file_path)
+                                                    <div class="mt-2">
+                                                        <a href="{{ Storage::url($comment->file_path) }}" target="_blank">
+                                                            <img src="{{ Storage::url($comment->file_path) }}" alt="Ticket Attachment" class="max-w-xs rounded border border-gray-200 shadow-sm hover:opacity-80 transition">
+                                                        </a>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endforeach
 
-                                        <form action="{{ route('comments.store', $activity) }}" method="POST" class="mt-3 flex gap-2">
+                                        <!-- UPDATED FORM STARTS HERE -->
+                                        <form action="{{ route('comments.store', $activity) }}" method="POST" enctype="multipart/form-data" class="mt-3">
                                             @csrf
-                                            <input type="text" name="body" required placeholder="Log troubleshooting steps..." class="text-sm w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                            <button type="submit" class="bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold py-1 px-4 rounded shadow-sm">
-                                                Post
-                                            </button>
+                                            <div class="flex gap-2 mb-2">
+                                                <input type="text" name="body" required placeholder="Log troubleshooting steps..." class="text-sm w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                                <button type="submit" class="bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold py-1 px-4 rounded shadow-sm">
+                                                    Post
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="mt-2">
+                                                <input type="file" name="attachment" accept="image/*,.pdf" class="text-xs text-gray-500 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                            </div>
                                         </form>
+                                        <!-- UPDATED FORM ENDS HERE -->
+
                                     </div>
                                 </td>
                                 

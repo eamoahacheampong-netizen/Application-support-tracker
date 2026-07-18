@@ -6,6 +6,7 @@ use App\Http\Controllers\CommentController;
 use App\Models\Activity;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function () {
     
     // NEW: Comment Route
     Route::post('/activities/{activity}/comments', [CommentController::class, 'store'])->name('comments.store');
-
+    
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
