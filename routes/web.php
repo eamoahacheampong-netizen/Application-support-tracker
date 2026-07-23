@@ -12,8 +12,25 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    // We added "with('comments.user')" so the database fetches the comments and the engineer's name efficiently
-    $activities = Activity::with('comments.user')->where('user_id', auth()->id())->latest()->get();
+    // 1. Start a fresh query, ensuring we load relationships and lock it to the current logged-in user
+    $query = Activity::with('comments.user')->where('user_id', auth()->id())->latest();
+
+    // 2. If the user typed in the search box, filter by title OR description
+    if (request()->filled('search')) {
+        $query->where(function($q) {
+            $q->where('title', 'like', '%' . request('search') . '%')
+              ->orWhere('description', 'like', '%' . request('search') . '%');
+        });
+    }
+
+    // 3. If the user selected a severity from the dropdown, filter by it
+    if (request()->filled('severity')) {
+        $query->where('severity', request('severity'));
+    }
+
+    // 4. Execute the query and grab the results
+    $activities = $query->get();
+
     return view('dashboard', compact('activities'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 

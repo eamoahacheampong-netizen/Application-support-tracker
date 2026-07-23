@@ -58,6 +58,41 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-bold mb-4">Active Queue</h3>
+                    <!-- Search and Filter Form -->
+<div class="mb-4 bg-gray-50 p-4 rounded-md border border-gray-200">
+    <form action="" method="GET" class="flex flex-col md:flex-row gap-4 items-end">
+        
+        <!-- Keyword Search -->
+        <div class="flex-1 w-full">
+            <label class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Search Tickets</label>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search summaries or details..." class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+        </div>
+        
+        <!-- Severity Dropdown -->
+        <div class="w-full md:w-48">
+            <label class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Severity</label>
+            <select name="severity" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                <option value="">All Severities</option>
+                <option value="Low" {{ request('severity') == 'Low' ? 'selected' : '' }}>Low</option>
+                <option value="Medium" {{ request('severity') == 'Medium' ? 'selected' : '' }}>Medium</option>
+                <option value="High" {{ request('severity') == 'High' ? 'selected' : '' }}>High</option>
+            </select>
+        </div>
+        
+        <!-- Buttons -->
+        <div class="flex items-center gap-2">
+            <button type="submit" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded shadow-sm text-sm transition">
+                Filter
+            </button>
+            
+            <!-- Show a "Clear" link only if filters are active -->
+            @if(request()->hasAny(['search', 'severity']))
+                <a href="{{ url()->current() }}" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">Clear</a>
+            @endif
+        </div>
+        
+    </form>
+</div>
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-100">
                             <tr>
