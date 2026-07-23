@@ -19,8 +19,14 @@ As an SRE, the primary focus of this build was **reliability, portability, and e
 * **Implementation:** State-based UI and strict Controller validation.
 * **Justification:** The application utilizes an impact matrix (Low, Medium, High) and enforces strict state control on troubleshooting logs. Engineers cannot log steps on "Pending" tickets (forcing them to claim the ticket via "In Progress"), and logs are permanently archived and locked once marked "Completed."
 
+### 4. Stateless Querying (Search & Filter)
+* **Implementation:** UI filtering utilizes GET requests and URL parameters (`?search=x&severity=y`).
+* **Justification:** Keeps the backend stateless and allows specific dashboard views (e.g., "All High Severity Tickets") to be bookmarked, shared between engineers, or linked directly in alert notifications.
+
 ## Core Features Implemented
 - [x] **CRUD Operations:** Users can input, view, and update daily support activities.
+- [x] **Search & Filtering:** Dynamic, stateless querying of the active queue by keyword and severity levels.
+- [x] **File Attachments:** Capability to securely upload and attach screenshots or log files directly to specific troubleshooting activity comments.
 - [x] **Status Lifecycle Management:** Automated tracking of ticket states (Pending ➡️ In Progress ➡️ Completed).
 - [x] **Automated Metadata:** System securely captures authenticated User IDs and timestamps for every action.
 - [x] **Metrics Dashboard:** Real-time calculation of Total Volume, Active Queue, and Resolved tickets.
